@@ -7,13 +7,20 @@ import junit.framework.TestCase;
 /**
  * Created by benkhale on 9/28/15.
  */
-public class TweetListTest extends ActivityInstrumentationTestCase2 {
+public class TweetListTest extends ActivityInstrumentationTestCase2 implements MyObserver{
+    private Boolean wasNotified = Boolean.FALSE;
 
     public TweetListTest() {
         super(ca.ualberta.cs.lonelytwitter.LonelyTwitterActivity.class);
     }
 
-
+    public void testAddObserver(){
+        TweetList list = new TweetList();
+        list.addObserver(this);
+        wasNotified = Boolean.FALSE;
+        list.addObserver(new NormalTweet("test"));
+        assertTrue(wasNotified);
+    }
 
     public void testAddTweet() {
         TweetList list = new TweetList();

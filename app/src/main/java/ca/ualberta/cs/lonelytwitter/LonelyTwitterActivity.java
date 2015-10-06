@@ -18,34 +18,35 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-public class LonelyTwitterActivity extends Activity {
+public class LonelyTwitterActivity extends Activity implements MyObserver {
 
-	private static final String FILENAME = "file.sav";
-	private EditText bodyText;
-	private ListView oldTweetsList;
+	private static final String FILENAME = "file.sav";  //model
+	private EditText bodyText;   //model
+	private ListView oldTweetsList;  //modle
 	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
-		Tweet tweet;
+		Tweet tweet; //model
 
 
 		try {
-			tweet = new ImportantTweet("longer than 140 characters");
+			tweet = new ImportantTweet("longer than 140 characters");  //model
 		} catch (IOException e) {
 			//e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException();   //controller
 		}
 
 
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+		super.onCreate(savedInstanceState);  //controller
+		setContentView(R.layout.main);     //controller
 
-		bodyText = (EditText) findViewById(R.id.body);
-		Button saveButton = (Button) findViewById(R.id.save);
-		oldTweetsList = (ListView) findViewById(R.id.oldTweetsList);
+		bodyText = (EditText) findViewById(R.id.body);    //view
+		Button saveButton = (Button) findViewById(R.id.save);    //view
+		oldTweetsList = (ListView) findViewById(R.id.oldTweetsList);    //view
 
+		//this whole block is controller
 		saveButton.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
@@ -62,33 +63,35 @@ public class LonelyTwitterActivity extends Activity {
 	protected void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
-		String[] tweets = loadFromFile();
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				R.layout.list_item, tweets);
-		oldTweetsList.setAdapter(adapter);
+		String[] tweets = loadFromFile();  //model
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,  //controller
+				R.layout.list_item, tweets);   //controller
+		oldTweetsList.setAdapter(adapter);  //controller
 	}
 
 	private String[] loadFromFile() {
-		ArrayList<String> tweets = new ArrayList<String>();
+		ArrayList<String> tweets = new ArrayList<String>();  //model
 		try {
-			FileInputStream fis = openFileInput(FILENAME);
-			BufferedReader in = new BufferedReader(new InputStreamReader(fis));
-			String line = in.readLine();
-			while (line != null) {
-				tweets.add(line);
-				line = in.readLine();
+			FileInputStream fis = openFileInput(FILENAME);  //controller
+			BufferedReader in = new BufferedReader(new InputStreamReader(fis));  //contoller
+			String line = in.readLine();   //model
+			while (line != null) {    //controller
+				tweets.add(line);   //model
+				line = in.readLine();   //model
 			}
 
-		} catch (FileNotFoundException e) {
+		} catch (FileNotFoundException e) {   //controller
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (IOException e) {  //controller
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return tweets.toArray(new String[tweets.size()]);
+		return tweets.toArray(new String[tweets.size()]);    //model
 	}
-	
+
+
+	//This whole block is a controller
 	private void saveInFile(String text, Date date) {
 		try {
 			FileOutputStream fos = openFileOutput(FILENAME,
@@ -103,5 +106,9 @@ public class LonelyTwitterActivity extends Activity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public void myNotify(MyObservable observable) {
+		adapter.notifyDataSetChanged;  //controller
 	}
 }
